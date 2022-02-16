@@ -1,0 +1,9 @@
+.vscode
+env
+__pycache__
+
+# tailwind css
+templates/package.json
+templates/tailwind.config.js
+templates/package-lock.json
+templates/node_modules
