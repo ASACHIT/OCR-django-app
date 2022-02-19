@@ -1,18 +1,33 @@
-from django.shortcuts import render
 import pytesseract
-pytesseract.pytesseract.tesseract_cmd = r"C:\Program Files\Tesseract-OCR\tesseract.exe" # Path to tesseract.exe
 import numpy as np
+from django.shortcuts import render
+from django.contrib import messages
+# import form django
+
 from PIL import Image
-# Create your views here.
+from base64 import b64encode
+import base64
+# you have to install tesseract module too from here - https://github.com/UB-Mannheim/tesseract/wiki
+pytesseract.pytesseract.tesseract_cmd = (
+    r"C:\Program Files\Tesseract-OCR\tesseract.exe"  # Path to tesseract.exe
+)
+
 
 def homepage(request):
-    if request.method == 'POST':
-        # get image from "image" form field
-        img = request.FILES['imagefile']
-        # convert image to numpy array
-        img = np.array(Image.open(img))
-        # extract text from image
-        text = pytesseract.image_to_string(img)
-        # return text
-        return render(request, 'home.html', context={'ocr': text})
+    if request.method == "POST":
+        try:
+            image = request.FILES["imagefile"]
+            # encode image to base64 string
+            image_base64 = base64.b64encode(image.read()).decode("utf-8")
+        except:
+            messages.add_message(
+                request, messages.ERROR, "No image selected or uploaded"
+            )
+            return render(request, "home.html")
+        lang = request.POST["language"]
+        img = np.array(Image.open(image))
+        text = pytesseract.image_to_string(img, lang=lang)
+        # return text to html
+        return render(request, "home.html", {"ocr": text, "image": image_base64})
+
     return render(request, "home.html")

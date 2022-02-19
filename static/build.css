@@ -843,10 +843,9 @@ button:hover .button-text {
 
 
 
-/* From cssbuttons.io by @alexroumi */
+
 .scan {
-    display: flex;
-    justify-content: center;
+
     align-items: center;
     padding: 15px 25px;
     height: 2.9em;
@@ -857,10 +856,8 @@ button:hover .button-text {
     z-index: 1;
     background: #ffffff;
     position: relative;
-    font-weight: 1000;
     font-size: 17px;
-    -webkit-box-shadow: 4px 8px 19px -3px rgba(0, 0, 0, 0.27);
-    box-shadow: 4px 8px 19px -3px rgba(0, 0, 0, 0.27);
+    text-transform: uppercase;
     transition: all 350ms;
     overflow: hidden;
 }
@@ -875,8 +872,6 @@ button:hover .button-text {
     border-radius: 15px;
     background-color: #282936;
     z-index: -1;
-    -webkit-box-shadow: 4px 8px 19px -3px rgba(0, 0, 0, 0.27);
-    box-shadow: 4px 8px 19px -3px rgba(0, 0, 0, 0.27);
     transition: all 350ms;
 }
 

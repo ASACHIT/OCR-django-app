@@ -7,27 +7,25 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>OCR.py</title>
         <link rel="stylesheet" href="/static/build.css">
-        <!-- <script src="https://cdn.tailwindcss.com"></script> -->
+        <script src="https://cdn.tailwindcss.com"></script>
         <link href="http://fonts.cdnfonts.com/css/euclid-circular-a?styles=100037,100034,100036,100039,100031"
             rel="stylesheet">
         <script src="/static/copy.js"></script>
-        <!-- <script src="/static/image.js"></script> -->
-
+        <script src="/static/error.js"></script>
     </head>
 
     <body class="bg-slate-50" style="font-family: 'Euclid Circular A', sans-serif;">
         <header class="text-gray-600 body-font">
             <div class="container mx-auto flex flex-wrap p-5 flex-col md:flex-row items-center">
                 <a class="flex title-font font-medium items-center text-gray-900 mb-4 md:mb-0">
-
                     <span class="ml-3 text-xl">OCR</span>
                 </a>
                 <nav class="md:ml-auto md:mr-auto flex flex-wrap items-center text-base justify-center">
                     <a href="/" class="mr-5 cursor-pointer hover:text-gray-900">Home</a>
                     <a class="mr-5 cursor-pointer hover:text-gray-900">About</a>
                     <a class="mr-5 cursor-pointer hover:text-gray-900">Contact</a>
-                    <a class="mr-5 cursor-pointer hover:text-gray-900">Creator</a>
-
+                    <a href="https://www.facebook.com/sachhit.yadav"
+                        class="mr-5 cursor-pointer hover:text-gray-900">Creator</a>
                 </nav>
                 <a href="https://github.com/ASACHIT/OCR-django-app.git" target="_blank">
                     <button
@@ -39,40 +37,79 @@
                     </button>
                 </a>
             </div>
+
+
         </header>
+        <!-- error popup modal -->
+        {% if messages %}
+        {% for msg in messages %}
+        <div id="error-modal" class="flex animate-pulse w-full max-w-sm mx-auto overflow-hidden bg-white rounded-lg shadow-lg
+       fixed left-8 top-8">
+            <div class="flex items-center justify-center w-12 stroke-slate-900">
+                <svg class="w-6 h-6 text-slate-800 fill-current" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                        d="M20 3.33331C10.8 3.33331 3.33337 10.8 3.33337 20C3.33337 29.2 10.8 36.6666 20 36.6666C29.2 36.6666 36.6667 29.2 36.6667 20C36.6667 10.8 29.2 3.33331 20 3.33331ZM21.6667 28.3333H18.3334V25H21.6667V28.3333ZM21.6667 21.6666H18.3334V11.6666H21.6667V21.6666Z" />
+                </svg>
+            </div>
+
+            <div class="px-4 py-2 -mx-3">
+                <div class="mx-3">
+                    <span class="font-semibold text-slate-800 ">Error</span>
+                    <p class="text-sm text-gray-600 ">{{msg}}</p>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+        {% endif %}
+        <!-- error popup modal -->
 
         <section class="text-gray-600">
             <div class="container px-5 py-24 mx-auto">
                 <div class="flex flex-col text-center w-full mb-12">
                     <h1 class="sm:text-7xl text-2xl font-medium mb-4 text-gray-900">Text Extractor</h1>
-                    <p class="lg:w-2/3 mx-auto leading-relaxed text-base">Extract text from images</p>
+                    <p class="lg:w-2/3 mx-auto leading-relaxed text-xl">Extract text from images</p>
                 </div>
-                <div
-                    class="flex justify-center lg:w-2/3 w-full sm:flex-row flex-col mx-auto px-8 sm:space-x-4 sm:space-y-0 space-y-4 sm:px-0 items-end">
-                    <div class="relative ">
-                        <label for="full-name" class="leading-7 text-sm text-gray-600">Full Name</label>
-                        <button class="scan py-1 px-3 ease-in-out bg-white shadow-md"
-                            onclick="document.getElementById('formFile').click()">
-                            <span class="button-text">Upload IMG</span>
-                        </button>
-                    </div>
+
+
+                <div class="flex space-x-1 justify-center mr-3">
+                    <button class="scan inline-block  shadow-md uppercase" id="upload-btn"
+                        onclick="document.getElementById('formFile').click()">Upload IMG</button>
                     <form method="post" enctype="multipart/form-data">
                         {% csrf_token %}
-                        <input name="imagefile" accept="image/*" type="file" id="formFile" style="display: none;">
-
-                        <button type="submit" class="scan shadow-md py px-8 ">
-                            <span class="button-text">SCAN TEXT</span>
+                        <input name="imagefile" re accept="image/*" type="file" id="formFile" style="display: none;"
+                            onclick="uploaded()">
+                        <button class="scan inline-block shadow-md ml-3" disabled>
+                            <select name="language" id="languages" class="lang-btn  " style="background: none;">
+                                <option value="eng" selected>English</option>
+                                <option value="nep">Nepali</option>
+                                <option value="hin">Hindi</option>
+                            </select>
                         </button>
+                        <button type="submit" class="scan inline-block shadow-md bg-white ml-3">SCAN</button>
                     </form>
-
                 </div>
+
+
+                <!-- Uploaded image will be shown -->
+                {% if image %}
+                <div class="flex justify-center ease-out m-5 rounded-2xl duration-300">
+                    <img class="justify-center rounded-2xl hover:scale-105 duration-500"
+                        src="data:image/png;base64, {{ image }}">
+                </div>
+                {% endif %}
+                <!-- Uploaded image will be shown -->
+
+                <!-- OCR text will be shown -->
                 {% if ocr %}
                 <div class=" ease-out bg-white text-slate-800 rounded-2xl hover:shadow-xl p-6 mt-3 duration-300 w-auto">
                     <p id="ocrtext" class="text-lg mt-2  mb-8 text-center">{{ ocr }}</p>
                     <button id="copybtn" onclick="copy()" class="button">Copy Text</button>
                 </div>
                 {% endif %}
+                <!-- OCR text will be shown -->
             </div>
+
+
         </section>
         <section class="text-gray-600 body-font">
             <div class="container px-5 py-24 mx-auto flex flex-wrap">
@@ -80,6 +117,7 @@
                     <img id="svgs" alt="feature" class="image-slide object-center h-3/4 w-3/4"
                         src="/static/assets/1.svg">
                 </div>
+                <!-- script to change svg change  -->
                 <script>
                     console.log('image.js');
                     var i = 0;
@@ -96,6 +134,7 @@
                     }, 3000);
 
                 </script>
+                <!-- script to change svg change  -->
                 <div class="flex flex-col flex-wrap lg:py-6 -mb-10 lg:w-1/2 lg:pl-12 lg:text-left text-center">
                     <div class="flex flex-col mb-10 lg:items-start items-center">
                         <div
