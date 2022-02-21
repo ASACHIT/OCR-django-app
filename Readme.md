@@ -35,7 +35,8 @@ Currently i have included commonly used language list only, feature request for 
   # open localhost:8000  url in browser 
 ```
 Note: You have to install [tesseract module](https://github.com/UB-Mannheim/tesseract/wiki) too
-## Technology used
+## Frameworks/lib used
+- Tailwindcss
 - django
 - pytesseract
 
