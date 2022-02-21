@@ -4,28 +4,29 @@
     <head>
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>OCR.py</title>
-        <link rel="stylesheet" href="/static/build.css">
-        <script src="https://cdn.tailwindcss.com"></script>
+        <meta name="description"
+            content="Extract or scan text from images in multiple languages- English Hindi Nepali etc. Quickly Get Text from Image">
+        <title>Text Extractor Scan text from Image| OCR</title>
+        <link rel="stylesheet" href="/static/style.css">
         <link href="http://fonts.cdnfonts.com/css/euclid-circular-a?styles=100037,100034,100036,100039,100031"
             rel="stylesheet">
-        <script src="/static/copy.js"></script>
+        <link rel='stylesheet'
+            href='https://cdn-uicons.flaticon.com/uicons-regular-rounded/css/uicons-regular-rounded.css'>
         <script src="/static/error.js"></script>
+        <link rel="shortcut icon" href="/static/assets/icons/TEXT.svg" type="image/x-icon">
     </head>
+
 
     <body class="bg-slate-50" style="font-family: 'Euclid Circular A', sans-serif;">
         <header class="text-gray-600 body-font">
             <div class="container mx-auto flex flex-wrap p-5 flex-col md:flex-row items-center">
                 <a class="flex title-font font-medium items-center text-gray-900 mb-4 md:mb-0">
-                    <span class="ml-3 text-xl">OCR</span>
+                    <span class="ml-3 text-xl">OCR <i class="fi fi-rr-text"></i></span>
                 </a>
                 <nav class="md:ml-auto md:mr-auto flex flex-wrap items-center text-base justify-center">
-                    <a href="/" class="mr-5 cursor-pointer hover:text-gray-900">Home</a>
-                    <a class="mr-5 cursor-pointer hover:text-gray-900">About</a>
-                    <a class="mr-5 cursor-pointer hover:text-gray-900">Contact</a>
-                    <a href="https://www.facebook.com/sachhit.yadav"
-                        class="mr-5 cursor-pointer hover:text-gray-900">Creator</a>
+                    <a href="/" class="mr-5 cursor-pointer hover:text-gray-900"><i class="fi fi-rr-home"></i> Home</a>
+                    <a href="https://www.facebook.com/sachhit.yadav" target="_blank"
+                        class="mr-5 cursor-pointer hover:text-gray-900"><i class="fi fi-rr-user"></i> Creator</a>
                 </nav>
                 <a href="https://github.com/ASACHIT/OCR-django-app.git" target="_blank">
                     <button
@@ -67,33 +68,38 @@
             <div class="container px-5 py-24 mx-auto">
                 <div class="flex flex-col text-center w-full mb-12">
                     <h1 class="sm:text-7xl text-2xl font-medium mb-4 text-gray-900">Text Extractor</h1>
-                    <p class="lg:w-2/3 mx-auto leading-relaxed text-xl">Extract text from images</p>
+                    <p class="lg:w-2/3 mx-auto leading-relaxed text-xl">Extract or Scan text from images</p>
                 </div>
 
 
-                <div class="flex space-x-1 justify-center mr-3">
-                    <button class="scan inline-block  shadow-md uppercase" id="upload-btn"
-                        onclick="document.getElementById('formFile').click()">Upload IMG</button>
-                    <form method="post" enctype="multipart/form-data">
-                        {% csrf_token %}
-                        <input name="imagefile" re accept="image/*" type="file" id="formFile" style="display: none;"
-                            onclick="uploaded()">
-                        <button class="scan inline-block shadow-md ml-3" disabled>
-                            <select name="language" id="languages" class="lang-btn  " style="background: none;">
-                                <option value="eng" selected>English</option>
-                                <option value="nep">Nepali</option>
-                                <option value="hin">Hindi</option>
-                            </select>
+                <div class="container">
+                    <div class="buttons">
+                        <button id="upload-btn" onclick="document.getElementById('formFile').click()"
+                            class="custom-btn shadow-md mb-2">Upload
+                            Img <i class="fi fi-rr-upload"></i>
                         </button>
-                        <button type="submit" class="scan inline-block shadow-md bg-white ml-3">SCAN</button>
-                    </form>
+                        <form method="post" enctype="multipart/form-data" class="flex justify-center">
+                            {% csrf_token %}
+                            <input name="imagefile" re accept="image/*" type="file" id="formFile"
+                                style="display: none;">
+                            <button class="custom-btn shadow-md " disabled>
+                                <select name="language" id="languages" class="bg-transparent">
+                                    <option value="eng" selected>English</option>
+                                    <option value="nep">Nepali</option>
+                                    <option value="hin">Hindi</option>
+                                </select>
+                            </button>
+                            <button type="submit" class="custom-btn shadow-md bg-white">Scan <i
+                                    class="fi fi-rr-search"></i></button>
+                        </form>
+                    </div>
                 </div>
 
 
                 <!-- Uploaded image will be shown -->
                 {% if image %}
-                <div class="flex justify-center ease-out m-5 rounded-2xl duration-300">
-                    <img class="justify-center rounded-2xl hover:scale-105 duration-500"
+                <div class="flex justify-center ease-out m-5 rounded-2xl duration-300 h-96">
+                    <img class="justify-center rounded-2xl hover:scale-105 stroke-white stroke-2 duration-500"
                         src="data:image/png;base64, {{ image }}">
                 </div>
                 {% endif %}
@@ -101,9 +107,11 @@
 
                 <!-- OCR text will be shown -->
                 {% if ocr %}
-                <div class=" ease-out bg-white text-slate-800 rounded-2xl hover:shadow-xl p-6 mt-3 duration-300 w-auto">
-                    <p id="ocrtext" class="text-lg mt-2  mb-8 text-center">{{ ocr }}</p>
-                    <button id="copybtn" onclick="copy()" class="button">Copy Text</button>
+                <div class=" ease-out bg-white text-slate-800 rounded-2xl hover:shadow-lg p-6 mt-3 duration-300 w-auto">
+                    <p id="ocrtext" class="text-lg mt-2  mb-8 text-center ">{{ ocr }}</p>
+                    <button id="copybtn" onclick="copy()" class="button">Copy Text
+                        <i class="fi fi-rr-duplicate"></i>
+                    </button>
                 </div>
                 {% endif %}
                 <!-- OCR text will be shown -->
@@ -139,10 +147,7 @@
                     <div class="flex flex-col mb-10 lg:items-start items-center">
                         <div
                             class="w-12 h-12 inline-flex items-center justify-center rounded-full bg-slate-300 text-slate-800 mb-5">
-                            <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                stroke-width="2" class="w-6 h-6" viewBox="0 0 24 24">
-                                <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
-                            </svg>
+                            <i class="fi fi-rr-running icons"></i>
                         </div>
                         <div class="flex-grow">
                             <h2 class="text-gray-900 text-lg title-font font-medium mb-3">Fast and Easy</h2>
@@ -185,6 +190,44 @@
             </div>
         </section>
     </body>
+
+    <footer class="text-gray-600 body-font">
+        <div class="container px-5 py-8 mx-auto flex items-center sm:flex-row flex-col">
+            <a class="flex title-font font-medium items-center md:justify-start justify-center text-gray-900">
+                <img src="/static/assets/icons/sachit.jpg" alt="" srcset=""
+                    class="w-h-20 h-20 text-white p-2 stroke-slate-400 rounded-full">
+                <span class="ml-3 text-xl">TEXT Extractor</span>
+            </a>
+            <p class="text-sm text-gray-500 sm:ml-4 sm:pl-4 sm:border-l-2 sm:border-gray-200 sm:py-2 sm:mt-0 mt-4">
+                Sachit Yadav
+            </p>
+
+            <span class="inline-flex sm:ml-auto sm:mt-0 mt-4 justify-center sm:justify-start">
+                <a class="text-gray-500" href="https://www.facebook.com/sachhit.yadav" target="_blank">
+                    <svg fill="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        class="w-5 h-5" viewBox="0 0 24 24">
+                        <path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"></path>
+                    </svg>
+                </a>
+                <a class="ml-3 text-gray-500" href="https://www.instagram.com/sachhit_yadav/" target="_blank">
+                    <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                        stroke-width="2" class="w-5 h-5" viewBox="0 0 24 24">
+                        <rect width="20" height="20" x="2" y="2" rx="5" ry="5"></rect>
+                        <path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37zm1.5-4.87h.01"></path>
+                    </svg>
+                </a>
+                <a class="ml-3 text-gray-500" href="https://www.linkedin.com/in/sachit-yadav/" target="_blank">
+                    <svg fill="currentColor" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                        stroke-width="0" class="w-5 h-5" viewBox="0 0 24 24">
+                        <path stroke="none"
+                            d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z">
+                        </path>
+                        <circle cx="4" cy="4" r="2" stroke="none"></circle>
+                    </svg>
+                </a>
+            </span>
+        </div>
+    </footer>
 
 
 </html>
